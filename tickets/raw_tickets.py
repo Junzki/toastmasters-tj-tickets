@@ -62,8 +62,24 @@ def _read_raw(input_file: str):
     df = pd.read_excel(input_file)
     df = df[list(FIELDS_MAP.keys())]
     df = df.rename(columns=FIELDS_MAP)
+    df = extract_raw_buyer_info(df)
 
     return df
+
+
+def extract_raw_buyer_info(df: pd.DataFrame) -> pd.DataFrame:
+    fields = [f[0] for f in BUYER_INFO_FIELDS_MAP]
+
+    df = df['raw_buyer_info'].apply(_buyer_info_to_series)
+    # df = df.drop(columns=['raw_buyer_info'])
+
+    return df
+
+
+
+def _buyer_info_to_series(in_: str) -> pd.Series:
+    s = pd.Series(_clean_raw_buyer_info(in_))
+    return s
 
 
 def _clean_raw_buyer_info(in_: str) -> ty.Dict[str, str]:
@@ -79,7 +95,6 @@ def _clean_raw_buyer_info(in_: str) -> ty.Dict[str, str]:
 
         out_[key] = value
 
-    out_.pop('read_rules', None)
     out_['recognition_award'] = out_.get('recognition_award') == '是'
 
     return out_
