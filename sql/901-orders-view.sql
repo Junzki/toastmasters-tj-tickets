@@ -1,0 +1,52 @@
+create or replace view orders_view as
+select order_id::varchar(255),
+       transfered,
+       (case when transfered then destination_member_name else name end)         as name,
+       (case when transfered then destination_club_name else club_name end)      as club_name,
+       (case when transfered then destination_member_phone::text else phone end) as phone,
+       (case when transfered then destination_wechat else wechat end)            as wechat,
+       (case when transfered then destination_division else division end)        as division,
+       (case when transfered then destination_area::text else area::text end)    as area,
+       (case when transfered then destination_city else city end)                as city,
+       (case when transfered then destination_member_email else email end)       as email,
+       recognition_award,
+       awards,
+       product_name,
+       paid_amount,
+       source_member_name,
+       source_member_phone,
+       (case when transfered then club_name else null end) as source_club_name,
+       purchased_at,
+       transfered_at
+from (select o.order_id,
+             (case
+                  when t.order_id is null then false
+                  else 'true'
+                 end) as transfered,
+             o.name,
+             o.club_name,
+             o.phone,
+             o.wechat,
+             o.division,
+             o.area,
+             o.city,
+             o.recognition_award,
+             o.awards,
+             o.product_name,
+             o.paid_amount,
+             o.email,
+             t.destination_member_name,
+             t.destination_member_phone,
+             t.destination_member_email,
+             t.destination_club_name,
+             t.destination_division,
+             t.destination_area,
+             t.destination_city,
+             t.destination_wechat,
+             t.source_member_name,
+             t.source_member_phone,
+             o.submitted_at as "purchased_at",
+             t.submitted_at as "transfered_at"
+      from orders o
+               left join transfers t on o.order_id = t.order_id) "_"
+order by order_id;

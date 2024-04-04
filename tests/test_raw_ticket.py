@@ -7,7 +7,7 @@ import unittest
 class TestRawTicket(unittest.TestCase):
     def test_read_raw(self):
         import pandas as pd
-        from tickets.raw_tickets import _read_raw
+        from tickets.raw_orders import _read_raw
 
         input_file = 'tests/fixtures/raw_tickets.xlsx'
         df = _read_raw(input_file)
@@ -16,7 +16,7 @@ class TestRawTicket(unittest.TestCase):
         self.assertEqual(df.shape, (3, 21))
 
     def test_read_raw_buyer_info(self):
-        from tickets.raw_tickets import _clean_raw_buyer_info
+        from tickets.raw_orders import _clean_raw_buyer_info
 
         origin_ = '我已阅读说明了解规则:我已详细阅读并理解;经确认我已获得认可奖:是;姓名:Stephanie Xu Dan;' \
                   '所获得的认可奖:个人奖-晋级大区比赛的选手,个人奖-俱乐部资深会员奖/十年及以上马龄;' \
