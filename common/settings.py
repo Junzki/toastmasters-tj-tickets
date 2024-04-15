@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-import configparser
 import os
 import pathlib
+import yaml
 
 
 class Settings(object):
@@ -16,16 +16,18 @@ class Settings(object):
     UPLOAD_FOLDER = MEDIA_ROOT / 'uploads'
 
     def __init__(self):
-        settings_file = os.environ.get('TICKETS_SETTINGS_FILE')
-        if settings_file:
+        default_settings_file = self.BASE_DIR / 'etc' / 'config.yaml'
+
+        settings_file = os.environ.get('TICKETS_SETTINGS_FILE', default_settings_file)
+        if settings_file and os.path.exists(settings_file):
             self.configure(settings_file)
 
     def configure(self, config_file: str):
-        parser = configparser.ConfigParser()
-        parser.read(config_file)
+        with open(config_file, 'r', encoding='utf-8') as f:
+            conf = yaml.load(f, Loader=yaml.SafeLoader)
 
-        for section in parser.sections():
-            for key, value in parser.items(section):
+        for section, part in conf.items():
+            for key, value in part.items():
                 if self._DEFAULT_SECTION == section:
                     key = key.upper()
                 else:
