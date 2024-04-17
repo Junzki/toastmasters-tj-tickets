@@ -7,9 +7,10 @@ import pandas as pd
 
 from common.constants import COMMA
 from .base import AbstractLoader
+from .member_name_mixin import MemberNameMixin
 
 
-class DistrictMemberLoader(AbstractLoader):
+class DistrictMemberLoader(AbstractLoader, MemberNameMixin):
 
     OUTPUT_SCHEMA = 'members'
 
@@ -51,9 +52,9 @@ class DistrictMemberLoader(AbstractLoader):
         'home_phone': str,
         'work_phone': str,
         'cell_phone': str,
-        'last_name': str,
-        'middle_name': str,
-        'first_name': str
+        # 'last_name': str,
+        # 'middle_name': str,
+        # 'first_name': str
     }
 
     def transform_cast_types(self, df: pd.DataFrame) -> pd.DataFrame:
@@ -90,26 +91,6 @@ class DistrictMemberLoader(AbstractLoader):
             return COMMA.join(phones_clean)
 
         df['phone'] = df.apply(_join, axis=1)
-        return df
-
-    def build_member_name_vector(self, df: pd.DataFrame) -> pd.DataFrame:
-
-        def _join(x):
-            names = [x['last_name'], x['middle_name'], x['first_name']]
-            names_clean = list()
-
-            for n in names:
-                n = n.lower().strip()
-                if n in ('', None, 'nan', 'None'):
-                    continue
-
-                names_clean.append(n)
-
-            names_clean = sorted(names_clean)
-            return COMMA.join(names_clean)
-
-        df['name_vector'] = df.apply(_join, axis=1)
-
         return df
 
     def run(self, path: str, **__) -> pd.DataFrame:
