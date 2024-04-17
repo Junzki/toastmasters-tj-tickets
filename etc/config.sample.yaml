@@ -1,0 +1,3 @@
+---
+DEFAULT:
+  dsn: postgresql+psycopg2://<database-connecton-args>

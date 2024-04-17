@@ -137,6 +137,7 @@ cython_debug/
 # Local enviorment
 .idea/
 .vscode/
-etc/
+etc/*
+!etc/config.sample.yaml
 media/
 data/
