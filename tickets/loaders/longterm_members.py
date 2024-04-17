@@ -16,7 +16,7 @@ class LongTermMembersLoader(PathwaysAccomplishmentLoader):
         'Division': 'division',
         'Area': 'area',
         'Original Join Date': 'original_join_date',
-        'Member': 'member_name',
+        'Member Name': 'member_name',
     }
 
     FIELDS_REQUIRES_TYPE_CASTING = {

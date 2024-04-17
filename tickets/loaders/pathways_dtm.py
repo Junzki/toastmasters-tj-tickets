@@ -18,7 +18,7 @@ class PathwaysDTMLoader(PathwaysAccomplishmentLoader):
         'Award': 'pathways_credit',
         'Date': 'date',
         'Member': 'member_name',
-        'Name': 'club_name'
+        'Club Name': 'club_name'
     }
 
     FIELDS_REQUIRES_TYPE_CASTING = {

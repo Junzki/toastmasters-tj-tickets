@@ -13,7 +13,7 @@ class AbstractLoader(object):
     FIELDS_MAP: ty.Dict[str, str]
     FIELDS_REQUIRES_TYPE_CASTING: ty.Dict[str, type]
 
-    def run(self, path: str, sheet_name: 'Sheet 1') -> pd.DataFrame:
+    def run(self, path: str, sheet_name: str = 'Sheet 1', **kwargs) -> pd.DataFrame:
         raise NotImplementedError()
 
     def transform_cast_types(self, df: pd.DataFrame) -> pd.DataFrame:
