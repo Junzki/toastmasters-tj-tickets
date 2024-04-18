@@ -55,6 +55,7 @@ class LoadDispatcher(object):
             base_dir = settings.BASE_DIR
 
         for task in task_defs:
+            print("%s: %s" % (task['loader'], task['path']))
             loader_klass = self.loader_registry.find_loader(task['loader'])
             path = task['path']
             sheet_name = task.get('sheet_name', 'Sheet 1')
