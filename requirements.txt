@@ -4,3 +4,4 @@ xlrd
 ipython
 sqlalchemy
 psycopg2-binary
+pypika

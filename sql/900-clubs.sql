@@ -9,8 +9,8 @@ create table clubs
 );
 
 
-insert into clubs (club_name)
-select distinct club_name
+insert into clubs (club_id, club_name)
+select distinct club_id, club_name
 from members;
 
 update clubs

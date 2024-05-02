@@ -34,5 +34,5 @@ class AbstractLoader(object):
         return df[columns]
 
     def load_db(self, df: pd.DataFrame) -> pd.DataFrame:
-        df.to_sql(self.OUTPUT_SCHEMA, engine, if_exists='replace', index=True, index_label='id')
+        df.to_sql(self.OUTPUT_SCHEMA, engine, if_exists='append', index=True, index_label='id')
         return df

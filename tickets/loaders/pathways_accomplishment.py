@@ -4,8 +4,9 @@ from __future__ import annotations
 import typing as ty  # noqa: F401
 
 import pandas as pd
-from common.constants import COMMASPACE, SPACE, COMMA
+from common.constants import COMMASPACE, SPACE, COMMA, FULL_WIDTH_COMMA, NAME_UNAVAILABLE, DASH
 from .base import AbstractLoader
+from ..db import get_member_name_by_id
 
 
 class PathwaysAccomplishmentLoader(AbstractLoader):
@@ -34,9 +35,34 @@ class PathwaysAccomplishmentLoader(AbstractLoader):
     }
 
     @staticmethod
-    def transform_member_name(df: pd.DataFrame) -> pd.DataFrame:
+    def clean_name_unavailable(name: str) -> (str, str, str):
+        if NAME_UNAVAILABLE not in name:
+            return name, None
+
+        member_id, _ = name.split(DASH, 1)
+        member_id = member_id.strip()
+
+        name, name_vector = get_member_name_by_id(member_id)
+        return member_id, name, name_vector
+
+    def transform_member_name(self, df: pd.DataFrame) -> pd.DataFrame:
 
         def _extract(name: str):
+            if not isinstance(name, str):
+                return pd.Series(dict(member_id=None,
+                                      member_name=name,
+                                      education_title=None,
+                                      name_vector=None))
+
+            if NAME_UNAVAILABLE in name:
+                member_id, name, name_vector = self.clean_name_unavailable(name)
+                if name_vector:
+                    return pd.Series(dict(member_id=member_id,
+                                          member_name=name,
+                                          education_title=None,
+                                          name_vector=name_vector))
+
+            name = name.replace(FULL_WIDTH_COMMA, COMMA)
             try:
                 name, education_title = name.split(COMMASPACE, 1)
             except ValueError:
@@ -46,9 +72,12 @@ class PathwaysAccomplishmentLoader(AbstractLoader):
             name_vector = sorted(name_vector)
             name_vector = COMMA.join(name_vector)
 
-            return pd.Series(dict(member_name=name, education_title=education_title, name_vector=name_vector))
+            return pd.Series(dict(member_id=None,
+                                  member_name=name,
+                                  education_title=education_title,
+                                  name_vector=name_vector))
 
-        df[['member_name', 'education_title', 'name_vector']] = df['member_name'].apply(_extract)
+        df[['member_id', 'member_name', 'education_title', 'name_vector']] = df['member_name'].apply(_extract)
 
         return df
 

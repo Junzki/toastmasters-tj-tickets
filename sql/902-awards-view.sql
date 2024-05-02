@@ -81,5 +81,5 @@ insert into recognition_awards (division,
             from long_term_members ltm)) "awards"
               left join clubs c on awards.club_name = c.club_name
               left join members m on m.name_vector = awards.name_vector
-              left join orders o on o.email = m.email_address or m.phone like '%' || o.phone || '%'
+              left join orders_old o on o.email = m.email_address or m.phone like '%' || o.phone || '%'
      order by division, area, club_id);

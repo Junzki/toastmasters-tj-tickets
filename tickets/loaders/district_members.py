@@ -32,26 +32,26 @@ class DistrictMemberLoader(AbstractLoader, MemberNameMixin):
         'First Name': 'first_name',
         'Middle Name': 'middle_name',
         'EDU': 'edu',
-        'Address Line 1': 'address_line_1',
-        'Address Line 2': 'address_line_2',
-        'City': 'city',
-        'State': 'state',
-        'Postal Code': 'postal_code',
-        'Country': 'country',
-        'Home Phone': 'home_phone',
-        'Work Phone': 'work_phone',
-        'Cell Phone': 'cell_phone',
+        # 'Address Line 1': 'address_line_1',
+        # 'Address Line 2': 'address_line_2',
+        # 'City': 'city',
+        # 'State': 'state',
+        # 'Postal Code': 'postal_code',
+        # 'Country': 'country',
+        # 'Home Phone': 'home_phone',
+        # 'Work Phone': 'work_phone',
+        # 'Cell Phone': 'cell_phone',
         'Email Address': 'email_address',
-        'Web URL': 'web_url',
-        'Max Level Completed': 'max_level_completed',
-        'Is Pathways Enrolled': 'is_pathways_enrolled'
+        # 'Web URL': 'web_url',
+        # 'Max Level Completed': 'max_level_completed',
+        # 'Is Pathways Enrolled': 'is_pathways_enrolled'
     }
 
     FIELDS_REQUIRES_TYPE_CASTING = {
         'area': str,
-        'home_phone': str,
-        'work_phone': str,
-        'cell_phone': str,
+        # 'home_phone': str,
+        # 'work_phone': str,
+        # 'cell_phone': str,
         # 'last_name': str,
         # 'middle_name': str,
         # 'first_name': str
@@ -95,8 +95,8 @@ class DistrictMemberLoader(AbstractLoader, MemberNameMixin):
 
     def run(self, path: str, **__) -> pd.DataFrame:
         df = self.extract_raw(path)
-        df = self.extract_is_pathways_enrolled(df)
-        df = self.extract_phone(df)
+        # df = self.extract_is_pathways_enrolled(df)
+        # df = self.extract_phone(df)
         df = self.build_member_name_vector(df)
 
         df = self.load_db(df)
